@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>7-segment display</title>
+		<script type="text/javascript" src="raphael-min.js"></script>
+	</head>
+	<body>
+		<div id="display" style="margin: 10px 10px 10px 10px; width: 350px; height: 150px;"></div>
+		<script type="text/javascript" src="7-seg.js"></script>
+		<script type="text/javascript">
+		var ssd = new SevenSegDisplay("display", "10:12");
+		ssd.display();
+		</script>
+	</body>
+</html>
