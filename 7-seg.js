@@ -17,7 +17,13 @@
 			shadow = (typeof option.segment_shadow !== "undefined" && 
 				option.segment_shadow),
 			theme = (typeof option.theme !== "undefined") ? option.theme :
-				"plain";
+				"plain",
+			thickness = (typeof option.segment_thickness !== "undefined") ?
+				option.segment_thickness : 1,
+			background_color = (typeof option.background_color !== "undefined") ?
+				option.background_color : "#ffffff";
+
+		document.getElementById(id).style.backgroundColor = background_color;
 
 		function getCoordinate(d_width) {
 			var o = {A: {x: 0, y: 0, w: 0, h: 0},B: {x: 0, y: 0, w: 0, h: 0},
@@ -76,47 +82,56 @@
 					switch (theme) {
 						case "rainbow":
 							segmentSet[i].attr({
-								stroke: theme_rainbow[i]
+								stroke: theme_rainbow[i],
+								'stroke-width': thickness
 							});
 							break;
 						case "red":
 							segmentSet[i].attr({
-								stroke: "#ff0000"
+								stroke: "#ff0000",
+								'stroke-width': thickness
 							});
 							break;
 						case "green":
 							segmentSet[i].attr({
-								stroke: "#00ff00"
+								stroke: "#00ff00",
+								'stroke-width': thickness
 							});
 							break;
 						case "orange":
 							segmentSet[i].attr({
-								stroke: "#ff7f00"
+								stroke: "#ff7f00",
+								'stroke-width': thickness
 							});
 							break;
 						case "yellow":
 							segmentSet[i].attr({
-								stroke: "#ffff00"
+								stroke: "#ffff00",
+								'stroke-width': thickness
 							});
 							break;
 						case "blue":
 							segmentSet[i].attr({
-								stroke: "#0000ff"
+								stroke: "#0000ff",
+								'stroke-width': thickness
 							});
 							break;
 						case "indigo":
 							segmentSet[i].attr({
-								stroke: "#4b0082"
+								stroke: "#4b0082",
+								'stroke-width': thickness
 							});
 							break;
 						case "violet":
 							segmentSet[i].attr({
-								stroke: "#8f00ff"
+								stroke: "#8f00ff",
+								'stroke-width': thickness
 							});
 							break;
 						default:
 							segmentSet[i].attr({
-								stroke: "#000000"
+								stroke: "#000000",
+								'stroke-width': thickness
 							});
 					}
 				}
@@ -135,10 +150,12 @@
 				i += 1;
 			}
 			(shadow) ? segments.attr({
-				'stroke-width': 1,
-				stroke : "#eee"
+				'stroke-width': thickness,
+				stroke : (typeof option.background_color == "undefined") ? 
+							"#eee" : 
+							option.background_color
 			}) : segments.attr({
-				stroke : "#fff"
+				stroke : background_color
 			});
 			shape_set[0] = segments;
 			digit_array = num.split('');
@@ -153,10 +170,12 @@
 					if (idx !== 0) {
 						segments.clone();
 						(shadow) ? segments.attr({
-							'stroke-width': 1,
-							stroke : "#eee"
+							'stroke-width': thickness,
+							stroke : (typeof option.background_color == "undefined") ? 
+										"#eee" : 
+										option.background_color
 						}) : segments.attr({
-							stroke : "#fff"
+							stroke : background_color
 						});
 						segments.transform("t"+idx*d_width+",0");
 						lightUp(num_array[idx], segments);
@@ -247,6 +266,10 @@
 		}
 		
 		this.update = function(num) {
+			if (typeof num == "number") {
+				num = num + "";
+			}
+			paper.clear();
 			if (typeof option.frame !== "undefined" && option.frame) {
 				var frameColor = "#eee", d_width = width/num.length;
 				if ( typeof option.frame_color !== "undefined") {
