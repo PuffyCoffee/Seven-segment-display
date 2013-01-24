@@ -5,15 +5,20 @@
  */
 
 (function(global) {
-	var SevenSegDisplay = function(id, num, option) {
-		this.time = num;		
+	var SevenSegDisplay = function(id, number, option) {
+		this.time = number;
 		var div = document.getElementById(id),
 			width = parseFloat(global.getComputedStyle(div).width),
 			height = parseFloat(window.getComputedStyle(div).height),
-			num_length = num.length,
+			num_length = number.length,
 			d_width = width/num_length,
 			d_height = height/2,
-			digit_array = [];
+			digit_array = [], shape_set = [],
+			paper = Raphael(div, width, height),
+			shadow = (typeof option.segment_shadow !== "undefined" && 
+				option.segment_shadow),
+			theme = (typeof option.theme !== "undefined") ? option.theme :
+				"plain";
 
 		function getCoordinate() {
 			var o = {A: {x: 0, y: 0, w: 0, h: 0},B: {x: 0, y: 0, w: 0, h: 0},
@@ -56,34 +61,86 @@
 				[1, 1, 1, 0, 0, 0, 0],
 				[1, 1, 1, 1, 1, 1, 1],
 				[1, 1, 1, 1, 0, 1, 1]
+			],	
+			theme_rainbow = [
+				"#ff0000",
+				"#ff7f00",
+				"#ffff00",
+				"#00ff00",
+				"#0000ff",
+				"#4b0082",
+				"#8f00ff"
 			];
-			// console.log(segmentSet[1].attr({
-			// 	stroke: "#f00"
-			// }));
-			console.log(num);
-			console.log(seg_display_array[num]);
+			
 			for (var i = 0; i < 7; i += 1) {
 				if (seg_display_array[num][i]) {
-					segmentSet[i].attr({
-						stroke: "#f00"
-					});
+					switch (theme) {
+						case "rainbow":
+							segmentSet[i].attr({
+								stroke: theme_rainbow[i]
+							});
+							break;
+						case "red":
+							segmentSet[i].attr({
+								stroke: "#ff0000"
+							});
+							break;
+						case "green":
+							segmentSet[i].attr({
+								stroke: "#00ff00"
+							});
+							break;
+						case "orange":
+							segmentSet[i].attr({
+								stroke: "#ff7f00"
+							});
+							break;
+						case "yellow":
+							segmentSet[i].attr({
+								stroke: "#ffff00"
+							});
+							break;
+						case "blue":
+							segmentSet[i].attr({
+								stroke: "#0000ff"
+							});
+							break;
+						case "indigo":
+							segmentSet[i].attr({
+								stroke: "#4b0082"
+							});
+							break;
+						case "violet":
+							segmentSet[i].attr({
+								stroke: "#8f00ff"
+							});
+							break;
+						default:
+							segmentSet[i].attr({
+								stroke: "#000000"
+							});
+					}
 				}
 			}
 		}
 
-		function displayDigit(paper) {
+		function displayDigit(num, paper) {
 			var segments = paper.set(), i = 0, num_array = [];
 			for (var o in getCoordinate()) {
 				if (getCoordinate().hasOwnProperty(o)) {					
 					var coord = getCoordinate()[o],
-					seg = paper.path("M"+coord.x+","+coord.y+"L"+(coord.x+coord.w)+","+(coord.y+coord.h)).attr({
-						'stroke-width': 1,
-						stroke: "#eee"
-					});
+					seg = paper.path("M"+coord.x+","+coord.y+"L"+(coord.x+coord.w)+","+(coord.y+coord.h));
 					segments.push(seg);
 				}
 				i += 1;
 			}
+			(shadow) ? segments.attr({
+				'stroke-width': 1,
+				stroke : "#eee"
+			}) : segments.attr({
+				stroke : "#fff"
+			});
+			shape_set[0] = segments;
 			digit_array = num.split('');
 			num_array = num.split('');
 			lightUp(parseInt(digit_array[0]), segments);
@@ -95,27 +152,89 @@
 					digit_array[idx] = true;
 					if (idx !== 0) {
 						segments.clone();
-						segments.attr({
-							stroke: "#eee"
+						(shadow) ? segments.attr({
+							'stroke-width': 1,
+							stroke : "#eee"
+						}) : segments.attr({
+							stroke : "#fff"
 						});
 						segments.transform("t"+idx*d_width+",0");
 						lightUp(num_array[idx], segments);
+						shape_set[idx] = segments;
 					}
 				}
 			});
 		}
 
 		function displayColon(paper) {
-			var colon = paper.set(), hasColon = false;
-			topCircle = paper.circle(getCenter().topCir.x, getCenter().topCir.y, 2).attr({
-				fill: "#f00",
-				stroke: "#fff"
-			});
-			botCircle = paper.circle(getCenter().botCir.x, getCenter().botCir.y, 2).attr({
-				fill: "#f00",
-				stroke: "#fff"
-			});
+			var colon = paper.set(), hasColon = false,
+			theme_rainbow = [
+				"#ff0000",
+				"#ff7f00",
+				"#ffff00",
+				"#00ff00",
+				"#0000ff",
+				"#4b0082",
+				"#8f00ff"
+			];
+			topCircle = paper.circle(getCenter().topCir.x, getCenter().topCir.y, 2);
+			botCircle = paper.circle(getCenter().botCir.x, getCenter().botCir.y, 2);
 			colon.push(topCircle, botCircle);
+			switch (theme) {
+				case "rainbow":
+					colon.attr({
+						fill: theme_rainbow[0],
+						stroke: "#ffffff"
+					});
+					break;
+				case "red":
+					colon.attr({
+						fill: "#ff0000",
+						stroke: "#ffffff"
+					});
+					break;
+				case "green":
+					colon.attr({
+						fill: "#00ff00",
+						stroke: "#ffffff"
+					});
+					break;
+				case "orange":
+					colon.attr({
+						fill: "#ff7f00",
+						stroke: "#ffffff"
+					});
+					break;
+				case "yellow":
+					colon.attr({
+						fill: "#ffff00",
+						stroke: "#ffffff"
+					});
+					break;
+				case "blue":
+					colon.attr({
+						fill: "#0000ff",
+						stroke: "#ffffff"
+					});
+					break;
+				case "indigo":
+					colon.attr({
+						fill: "#4b0082",
+						stroke: "#ffffff"
+					});
+					break;
+				case "violet":
+					colon.attr({
+						fill: "#8f00ff",
+						stroke: "#ffffff"
+					});
+					break;
+				default:
+					colon.attr({
+						fill: "#000000",
+						stroke: "#ffffff"
+					});
+			}
 			for (var i = 0; i < digit_array.length; i += 1) {
 				if (!digit_array[i]) {
 					colon.transform("t"+i*d_width+",0");
@@ -127,16 +246,27 @@
 			}
 		}
 
-		this.display = function() {
-			var paper = Raphael(div, width, height);
-			//paper.rect(0, 0, width, height);
-			// for (var i = 0; i < num_length; i += 1) {
-			// 	paper.path("M"+i*d_width+","+0+"L"+i*d_width+","+height).attr({
-			// 		'stroke-width': .5
-			// 	});
-			// }
-
-			displayDigit(paper);
+		this.display = function(num) {
+			if (typeof option.frame !== "undefined" && option.frame) {
+				var frameColor = "#eee";
+				if ( typeof option.frame_color !== "undefined") {
+					frameColor = option.frame_color;
+				}
+				paper.rect(0, 0, width, height).attr({
+					stroke: frameColor
+				});
+				for (var i = 0; i < num_length; i += 1) {
+					paper.path("M"+i*d_width+","+0+"L"+i*d_width+","+height).attr({
+						'stroke-width': .5,
+						stroke: frameColor
+					});
+				}
+			}
+			
+			if (typeof num == "undefined") {
+				num = number;
+			}
+			displayDigit(num, paper);
 			displayColon(paper);
 		};
 	}
