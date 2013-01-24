@@ -1,4 +1,6 @@
 # 7-segment display
+- Useful web component
+- Small library (7KB uncompressed)
 - MIT license
 
 Example
