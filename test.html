@@ -5,16 +5,18 @@
 		<script type="text/javascript" src="raphael-min.js"></script>
 	</head>
 	<body>
-		<div id="display" style="margin: 10px 10px 10px 10px; width: 150px; height: 25px;"></div>
+		<div id="display" style="margin: 10px 10px 10px 10px; width: 150px; height: 55px;"></div>
 		<script type="text/javascript" src="7-seg.js"></script>
 		<script type="text/javascript">
-		var ssd = new SevenSegDisplay("display", "11:08", {
+		var ssd = new SevenSegDisplay("display", {
 			frame: true,
 			frame_color: "#fff",
 			segment_shadow: true,
 			theme: "blue"
 		});
-		ssd.display("11:10");
+
+
+		ssd.update("10:13");
 
 		</script>
 	</body>

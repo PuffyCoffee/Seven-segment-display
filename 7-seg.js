@@ -5,13 +5,12 @@
  */
 
 (function(global) {
-	var SevenSegDisplay = function(id, number, option) {
-		this.time = number;
+	var SevenSegDisplay = function(id, option) {
 		var div = document.getElementById(id),
 			width = parseFloat(global.getComputedStyle(div).width),
 			height = parseFloat(window.getComputedStyle(div).height),
-			num_length = number.length,
-			d_width = width/num_length,
+			//num_length = num.length,
+			//d_width = width/num_length,
 			d_height = height/2,
 			digit_array = [], shape_set = [],
 			paper = Raphael(div, width, height),
@@ -20,7 +19,7 @@
 			theme = (typeof option.theme !== "undefined") ? option.theme :
 				"plain";
 
-		function getCoordinate() {
+		function getCoordinate(d_width) {
 			var o = {A: {x: 0, y: 0, w: 0, h: 0},B: {x: 0, y: 0, w: 0, h: 0},
 					 C: {x: 0, y: 0, w: 0, h: 0},D: {x: 0, y: 0, w: 0, h: 0},
 					 E: {x: 0, y: 0, w: 0, h: 0},F: {x: 0, y: 0, w: 0, h: 0},
@@ -36,7 +35,7 @@
 			return o;
 		}
 
-		function getCenter() {
+		function getCenter(d_width) {
 			return {
 				topCir: {
 					x: d_width/2,
@@ -125,10 +124,11 @@
 		}
 
 		function displayDigit(num, paper) {
-			var segments = paper.set(), i = 0, num_array = [];
-			for (var o in getCoordinate()) {
-				if (getCoordinate().hasOwnProperty(o)) {					
-					var coord = getCoordinate()[o],
+			var segments = paper.set(), i = 0, num_array = [],
+				d_width = width/num.length;
+			for (var o in getCoordinate(d_width)) {
+				if (getCoordinate(d_width).hasOwnProperty(o)) {					
+					var coord = getCoordinate(d_width)[o],
 					seg = paper.path("M"+coord.x+","+coord.y+"L"+(coord.x+coord.w)+","+(coord.y+coord.h));
 					segments.push(seg);
 				}
@@ -166,7 +166,7 @@
 			});
 		}
 
-		function displayColon(paper) {
+		function displayColon(paper, d_width) {
 			var colon = paper.set(), hasColon = false,
 			theme_rainbow = [
 				"#ff0000",
@@ -177,8 +177,8 @@
 				"#4b0082",
 				"#8f00ff"
 			];
-			topCircle = paper.circle(getCenter().topCir.x, getCenter().topCir.y, 2);
-			botCircle = paper.circle(getCenter().botCir.x, getCenter().botCir.y, 2);
+			topCircle = paper.circle(getCenter(d_width).topCir.x, getCenter(d_width).topCir.y, 2);
+			botCircle = paper.circle(getCenter(d_width).botCir.x, getCenter(d_width).botCir.y, 2);
 			colon.push(topCircle, botCircle);
 			switch (theme) {
 				case "rainbow":
@@ -245,17 +245,17 @@
 				colon.remove();
 			}
 		}
-
-		this.display = function(num) {
+		
+		this.update = function(num) {
 			if (typeof option.frame !== "undefined" && option.frame) {
-				var frameColor = "#eee";
+				var frameColor = "#eee", d_width = width/num.length;
 				if ( typeof option.frame_color !== "undefined") {
 					frameColor = option.frame_color;
 				}
 				paper.rect(0, 0, width, height).attr({
 					stroke: frameColor
 				});
-				for (var i = 0; i < num_length; i += 1) {
+				for (var i = 0; i < num.length; i += 1) {
 					paper.path("M"+i*d_width+","+0+"L"+i*d_width+","+height).attr({
 						'stroke-width': .5,
 						stroke: frameColor
@@ -263,11 +263,8 @@
 				}
 			}
 			
-			if (typeof num == "undefined") {
-				num = number;
-			}
 			displayDigit(num, paper);
-			displayColon(paper);
+			displayColon(paper, d_width);
 		};
 	}
 	global.SevenSegDisplay = SevenSegDisplay;
