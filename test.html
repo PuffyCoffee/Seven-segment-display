@@ -14,9 +14,12 @@
 			segment_shadow: true,
 			theme: "blue"
 		});
-
-
-		ssd.update("10:13");
+		setInterval(function() {
+			var d = new Date(),
+				h = d.getHours(),
+				m = d.getMinutes();
+			ssd.update((h+'') + ":" + (m+''));
+		}, 1000);
 
 		</script>
 	</body>
