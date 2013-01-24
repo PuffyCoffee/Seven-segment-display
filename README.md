@@ -22,4 +22,4 @@ Options
 * segment_shadow: true|false show segment shadow if don't light up
 * theme: "rainbow"|"red"|"green"|"orange"|"yellow"|"blue"|"indigo"|"violet" default is "plain"
 
-![Seven-segment Display](https://raw.github.com/PuffyCoffee/Seven-segment-display/master/screenshot/ssd.png "Seven-segment display")
+![Seven-segment Display](https://raw.github.com/PuffyCoffee/Seven-segment-display/master/ssd.png "Seven-segment display")
