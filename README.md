@@ -1,5 +1,7 @@
 # 7-segment display
-- Useful web component
+- Web component
+- Auto adjust size base on div size
+- vector-based
 - Small library (7KB uncompressed)
 - MIT license
 
@@ -35,3 +37,7 @@ Options
 ![Seven-segment Display](https://raw.github.com/PuffyCoffee/Seven-segment-display/master/screenshot/ssd4.png "Seven-segment display")
 
 ![Seven-segment Display](https://raw.github.com/PuffyCoffee/Seven-segment-display/master/screenshot/ssd5.png "Seven-segment display")
+
+-------
+
+Peng Zhang 2013
