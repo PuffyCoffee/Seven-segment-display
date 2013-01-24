@@ -11,7 +11,7 @@ var ssd = new SevenSegDisplay("display", {
 	segment_shadow: true,
 	theme: "blue"
 });
-ssd.update("12:00");
+ssd.update("20:52");
 ```
 
 Options
