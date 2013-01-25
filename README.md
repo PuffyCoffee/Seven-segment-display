@@ -8,7 +8,7 @@
 Example
 -------
 
-```
+```JavaScript
 var ssd = new SevenSegDisplay("display", {
 	frame: true,
 	frame_color: "#fff",
